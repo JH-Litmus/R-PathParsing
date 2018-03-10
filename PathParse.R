@@ -1,3 +1,4 @@
+setwd("~/Google 드라이브/SWE and PET in breast cancer/R-PathParsing")
 library(stringr)
 
 dat <- data.frame(var=c("Histologic type", "Tumor margin",
@@ -28,12 +29,17 @@ dat <- data.frame(var=c("Histologic type", "Tumor margin",
                         "HER2",
                         "p53",
                         "Ki",
-                        "AR"), val='NA')
+                        "AR",
+                        "p63 and SMMHC",
+                        "E-cadherin"), val='NA')
 
 df <- read.delim("clipboard",header=FALSE,sep=":",strip.white=TRUE)
 unstack(df)
 names(df) <-c("var", "val")
 df <- data.frame(lapply(df, gsub, pattern='\xa1\xde |- |"', replacement='', ignore.case=FALSE))
+df <- data.frame(lapply(df, gsub, pattern='CARCINOMA', replacement='carcinoma', ignore.case=FALSE))
+df <- data.frame(lapply(df, gsub, pattern='P63', replacement='p63', ignore.case=FALSE))
+df <- data.frame(lapply(df, gsub, pattern='E-Cad', replacement='E-cad', ignore.case=FALSE))
 
 valout <- str_split_fixed(df$val, "Lymph |in[ ]tumor |of[ ]the[ ]tumor |[(]0|[(]All|[(]1|[(]2|[(]3", 2)
 varout <- str_split_fixed(df$var, "[,]", 2)
@@ -41,7 +47,7 @@ df <- data.frame(varout[,1], valout[,1])
 
 dat$val <- as.character(dat$val)
 
-for (i in (1:30)) {
+for (i in (1:32)) {
   if (length(as.character(df$val[grep(dat$var[i], df$var, ignore.case = FALSE)])) == 0){
     next
   }
@@ -65,7 +71,7 @@ data.all <- cbind(data.all, dat$val)
 # colnames(dat)[2] <- j
 colnames(data.all)[length(data.all)] <- j
 
-write.csv(data.all, file="e:\\test.csv")
+write.csv(data.all, file="PathparseRaw.csv")
 
 
 
