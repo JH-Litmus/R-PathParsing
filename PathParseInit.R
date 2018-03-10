@@ -29,8 +29,6 @@ dat <- data.frame(var=c("Histologic type", "Tumor margin",
 
 data.all <- dat
 
-data.all <- read.csv("e:\\test.csv", header=TRUE, sep=",",check.names=FALSE )
+data.all <- read.csv("PathparseRaw.csv", header=TRUE, sep=",",check.names=FALSE )
 
-data.all[,227] <- NULL
-
-
+data.all[,272] <- NULL
